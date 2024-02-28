@@ -1,4 +1,8 @@
 {
+  "name": "commit-poc",
+  "scripts": {
+    "generate-changelog": "ts-node ./scripts/generate-changelog.ts"
+  },
   "devDependencies": {
     "@types/node": "^20.11.21",
     "ts-node": "^10.9.2",
