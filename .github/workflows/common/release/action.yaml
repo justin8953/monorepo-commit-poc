@@ -3,11 +3,10 @@ inputs:
   tag:
     type: string
     required: true
-  pre-release:
+  draft:
     type: boolean
     required: true
     default: true
-
 runs:
   using: composite
   steps:
@@ -19,14 +18,14 @@ runs:
       shell: bash
       run: |
         noteFile="--generate-notes"
-        # if the tag is a pre-release, then set the pre-release flag
-        if ${{inputs.pre-release}}; then
+        # if the tag is a draft release, then set the draft flag
+        if ${{inputs.draft}}; then
           # if a note file is generated, then create a release with the note
           if [ -f "CHANGELOG.md" ]; then
           noteFile="-F CHANGELOG.md"
           fi
           # create the release
-          gh release create ${{inputs.tag}} $noteFile -p
+          gh release create ${{inputs.tag}} $noteFile --draft 
         else
-          gh release edit ${{inputs.tag}} --prerelease=false
+          gh release create ${{inputs.tag}}
         fi

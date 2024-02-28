@@ -3,10 +3,15 @@ inputs:
   environment:
     type: string
     required: true
+outputs:
+  tag:
+    description: "The new tag name"
+    value: ${{ steps.create_tag.outputs.tag }}
 runs:
   using: composite
   steps:
     - shell: bash
+      id: create_tag
       run: |
         ts=`date +%s%3N`
         TAG=${{ inputs.environment }}-$ts

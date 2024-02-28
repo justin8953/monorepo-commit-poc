@@ -1,0 +1,13 @@
+name: delete-release
+inputs:
+  tag:
+    type: string
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: delete-release
+      shell: bash
+      run: |
+        echo "Deleting release ${{ inputs.tag }}"
+        gh release delete ${{ inputs.tag }} --yes

@@ -31,6 +31,7 @@ runs:
       run: |
         yarn
         yarn run generate-changelog
+
     - name: upload release note
       uses: actions/upload-artifact@v4
       with:
