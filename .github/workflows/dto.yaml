@@ -1,0 +1,56 @@
+name: dto
+
+on:
+  push:
+    paths:
+      - "cores/dto/**"
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: |
+          echo "Building..."
+          echo "Build complete."
+  pre-release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: tag
+        uses: ./.github/workflows/common/tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          environment: staging-dto
+      - name: pre-release
+        uses: ./.github/workflows/common/release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.TAG }}
+          pre-release: true
+
+  release:
+    runs-on: ubuntu-latest
+    needs: pre-release
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: tag
+        uses: ./.github/workflows/common/tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          environment: staging-dto
+      - name: pre-release
+        uses: ./.github/workflows/common/release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.TAG }}
+          pre-release: false

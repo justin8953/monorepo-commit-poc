@@ -1,0 +1,22 @@
+name: release
+inputs:
+  tag:
+    type: string
+    required: true
+  pre-release:
+    type: boolean
+    required: true
+    default: true
+
+runs:
+  using: composite
+  steps:
+    - name: release
+      run: |
+        preRelease=""
+        # if the tag is a pre-release, then set the pre-release flag
+        if ${{inputs.pre-release}}; then
+        preRelease="-p"
+        fi
+        # create the release
+        gh release create ${{inputs.tag}} --generate-notes $preRelease
