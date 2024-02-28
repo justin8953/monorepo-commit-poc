@@ -18,4 +18,4 @@ runs:
           echo $history >> CHANGELOG.md
         done
         NOTE=$(cat CHANGELOG.md)
-        echo ::set-output name=NOTE::$NOTE
+        echo "NOTE=$NOTE" >> "$GITHUB_OUTPUT"

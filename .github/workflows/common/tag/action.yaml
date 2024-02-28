@@ -13,4 +13,4 @@ runs:
         echo create tag $TAG
         git tag $TAG
         git push origin --tags
-        echo ::set-output name=TAG::$TAG
+        echo "TAG=$TAG" >> "$GITHUB_OUTPUT"
