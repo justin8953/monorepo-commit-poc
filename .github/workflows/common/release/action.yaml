@@ -3,9 +3,6 @@ inputs:
   tag:
     type: string
     required: true
-  note:
-    type: string
-    required: false
   pre-release:
     type: boolean
     required: true
@@ -14,18 +11,22 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: download-release-note
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{inputs.tag}}-release-note
     - name: release
       shell: bash
       run: |
         preRelease=""
-        noteStr="--generate-notes"
+        noteFile="--generate-notes"
         # if the tag is a pre-release, then set the pre-release flag
         if ${{inputs.pre-release}}; then
         preRelease="-p"
         fi
-        # if a note is provided, then create a release with the note
-        if [ -n "$note" ]; then
-        noteStr="-n $note"
+        # if a note file is generated, then create a release with the note
+        if [ -f "${{inputs.tag}}-release-note" ]; then
+        noteFile="-F ${{inputs.tag}}-release-note"
         fi
         # create the release
-        gh release create ${{inputs.tag}} $noteStr $preRelease
+        gh release create ${{inputs.tag}} $noteFile $preRelease
