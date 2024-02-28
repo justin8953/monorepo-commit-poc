@@ -39,7 +39,7 @@ jobs:
         uses: ./.github/workflows/common/release
         with:
           pre-release: true
-          tag: ${{ steps.generate-release-note.outputs.TAG }}
+          tag: ${{ steps.tag.outputs.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
