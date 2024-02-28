@@ -25,7 +25,7 @@ runs:
           noteFile="-F CHANGELOG.md"
           fi
           # create the release
-          gh release create ${{inputs.tag}} $noteFile --draft 
+          gh release create ${{inputs.tag}} -t ${{inputs.tag}} $noteFile --draft 
         else
-          gh release create ${{inputs.tag}}
+          gh release create ${{inputs.tag}} -t ${{inputs.tag}}
         fi
