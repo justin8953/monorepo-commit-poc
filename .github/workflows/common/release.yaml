@@ -3,6 +3,9 @@ inputs:
   tag:
     type: string
     required: true
+  file:
+    type: string
+    required: false
   pre-release:
     type: boolean
     required: true
@@ -14,9 +17,14 @@ runs:
     - name: release
       run: |
         preRelease=""
+        noteFile="--generate-notes"
         # if the tag is a pre-release, then set the pre-release flag
         if ${{inputs.pre-release}}; then
         preRelease="-p"
         fi
+        # if a file is provided, then create a release with the note file
+        if [ -n "$file" ]; then
+        noteFile="-F $file"
+        fi
         # create the release
-        gh release create ${{inputs.tag}} --generate-notes $preRelease
+        gh release create ${{inputs.tag}} $noteFile $preRelease

@@ -30,6 +30,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           environment: staging-dto
+      - name: generate-release-note
+        uses: ./.github/workflows/common/release-note
       - name: pre-release
         uses: ./.github/workflows/common/release
         env:
