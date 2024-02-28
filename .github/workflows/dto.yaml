@@ -27,9 +27,14 @@ jobs:
         uses: actions/checkout@v4
       - name: tag
         id: git-tag
-        uses: ./.github/workflows/common/tag
-        with:
-          environment: staging-dto
+        shell: bash
+        run: |
+          ts=`date +%s%3N`
+          TAG=staging-dto-$ts
+          echo "TAG=$TAG" >> "$GITHUB_OUTPUT"
+          echo create tag $TAG
+          git tag $TAG
+          git push origin --tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: test-ouput
