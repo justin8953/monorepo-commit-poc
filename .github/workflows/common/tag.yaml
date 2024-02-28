@@ -1,0 +1,15 @@
+name: tag
+inputs:
+  environment:
+    type: string
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        ts=`date +%s%3N`
+        TAG=${{ inputs.environment }}-$ts >> $GITHUB_ENV
+        echo create tag $TAG
+        git tag $TAG
+        git push origin --tags
