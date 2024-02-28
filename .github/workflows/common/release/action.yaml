@@ -19,14 +19,9 @@ runs:
       shell: bash
       run: |
         preRelease=""
-        noteFile="--generate-notes"
         # if the tag is a pre-release, then set the pre-release flag
         if ${{inputs.pre-release}}; then
         preRelease="-p"
         fi
-        # if a note file is generated, then create a release with the note
-        if [ -f "${{inputs.tag}}-release-note" ]; then
-        noteFile="-F ${{inputs.tag}}-release-note"
-        fi
         # create the release
-        gh release create ${{inputs.tag}} $noteFile $preRelease
+        gh release create ${{inputs.tag}} -F ${{inputs.tag}}-release-note $preRelease
