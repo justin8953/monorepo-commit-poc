@@ -26,7 +26,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: tag
-        id: tag
+        id: git-tag
         uses: ./.github/workflows/common/tag
         with:
           environment: staging-dto
@@ -35,18 +35,19 @@ jobs:
       - name: test-ouput
         shell: bash
         run: |
-          echo "Tag: ${{ steps.tag.outputs }}"
+          echo "Tag: ${{ steps.git-tag.outputs.* }}"
+          echo "Tag: ${{ steps.git-tag.outputs.TAG }}"
       - name: generate-release-note
         uses: ./.github/workflows/common/release-note
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag: ${{ steps.tag.outputs.TAG }}
+          tag: ${{ steps.git-tag.outputs.TAG }}
       - name: pre-release
         uses: ./.github/workflows/common/release
         with:
           pre-release: true
-          tag: ${{ steps.tag.outputs.TAG }}
+          tag: ${{ steps.git-tag.outputs.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
