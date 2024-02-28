@@ -9,12 +9,12 @@ runs:
       shell: bash
       run: |
         prs=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
-        -X GET /repos/zeller-engineering/component-bff/commits/${{github.ref}}/pulls --jq '.[].number')
+        -X GET /repos/justin8953/monorepo-commit-poc/commits/${{github.ref}}/pulls --jq '.[].number')
         echo "## Release Note" > CHANGELOG.md
         for pr in $prs; do
           echo "PR: $pr"
           history=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
-            -X GET /repos/zeller-engineering/component-bff/pulls/$pr/commits --jq '.[].commit | {message: .message, author: .author.name, date: .author.date, url: .url}')
+            -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq '.[].commit | {message: .message, author: .author.name, date: .author.date, url: .url}')
           echo $history >> CHANGELOG.md
         done
         cat CHANGELOG.md
