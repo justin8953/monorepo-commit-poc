@@ -32,6 +32,10 @@ jobs:
           environment: staging-dto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: test-ouput
+        shell: bash
+        run: |
+          echo "Tag: ${{ steps.tag.outputs }}"
       - name: generate-release-note
         uses: ./.github/workflows/common/release-note
         env:
