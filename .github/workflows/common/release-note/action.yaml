@@ -14,13 +14,21 @@ runs:
       run: |
         prs=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
         -X GET /repos/justin8953/monorepo-commit-poc/commits/${{inputs.tag}}/pulls --jq '.[].number')
-        echo "## Release Note" > CHANGELOG.md
+        echo "[" > CHANGELOG.json
         for pr in $prs; do
           echo "PR: $pr"
           history=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
-            -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq '.[].commit | {message: .message, author: .author.name, date: .author.date, url: .url}')
-          echo $history >> CHANGELOG.md
+            -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq '.[] | {message: .commit.message, author: .author.login, date: .commit.author.date, url: .commit.url}')
+          echo $history >> CHANGELOG.json
         done
+        echo "]" >> CHANGELOG.json
+    - name: format release note
+      use: actions/setup-node@4
+      with:
+        node-version: "18"
+      run: |
+        yarn
+        yarn generate-changelog
     - name: upload release note
       uses: actions/upload-artifact@v4
       with:
