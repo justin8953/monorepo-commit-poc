@@ -15,6 +15,7 @@ runs:
   using: composite
   steps:
     - name: release
+      shell: bash
       run: |
         preRelease=""
         noteFile="--generate-notes"
