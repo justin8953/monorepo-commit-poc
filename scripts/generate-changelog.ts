@@ -168,7 +168,7 @@ changelog.forEach(commit => {
         }
     }
     const component = components[scope][type];
-    component.commits.push(`${message} by @${commit.author} (commit)[${commit.url}] `);
+    component.commits.push(`${message} by @${commit.author} [link)(${commit.url}) `);
     component.jiraIDs.push(jiraID);
     component.author.push(commit.author);
 });
