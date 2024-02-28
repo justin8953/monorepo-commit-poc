@@ -50,10 +50,14 @@ jobs:
           tag: ${{ steps.git-tag.outputs.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   release:
     runs-on: ubuntu-latest
     needs: pre-release
+    environment: prod-dto
     steps:
+      - name: approval
+        shell: bash
+        run: |
+          echo "Approved."
       - name: checkout
         uses: actions/checkout@v4
