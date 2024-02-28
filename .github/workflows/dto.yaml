@@ -26,6 +26,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: tag
+        id: tag
         uses: ./.github/workflows/common/tag
         with:
           environment: staging-dto
