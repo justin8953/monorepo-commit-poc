@@ -13,7 +13,7 @@ runs:
       shell: bash
       run: |
         prs=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
-        -X GET /repos/justin8953/monorepo-commit-poc/commits/${{github.ref}}/pulls --jq '.[].number')
+        -X GET /repos/justin8953/monorepo-commit-poc/commits/${{inputs.tag}}/pulls --jq '.[].number')
         echo "## Release Note" > CHANGELOG.md
         for pr in $prs; do
           echo "PR: $pr"
