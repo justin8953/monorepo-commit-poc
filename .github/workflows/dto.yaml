@@ -73,6 +73,7 @@ jobs:
         uses: ./.github/workflows/common/release
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
+          draft: false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: delete-draf-release
