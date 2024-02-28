@@ -16,6 +16,7 @@ runs:
       with:
         name: ${{inputs.tag}}-release-note
     - name: check-file
+      shell: bash
       run: |
         ls -l
     - name: release
