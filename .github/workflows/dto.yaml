@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -21,20 +20,16 @@ jobs:
   pre-release:
     runs-on: ubuntu-latest
     needs: build
-
+    outputs:
+      tag: ${{ steps.git-tag.outputs.TAG }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: tag
         id: git-tag
-        shell: bash
-        run: |
-          ts=`date +%s%3N`
-          TAG=staging-dto-$ts
-          echo "TAG=$TAG" >> "$GITHUB_OUTPUT"
-          echo create tag $TAG
-          git tag $TAG
-          git push origin --tags
+        uses: ./.github/workflows/common/tag
+        with:
+          environment: staging-dto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: generate-release-note
@@ -43,10 +38,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
-      - name: pre-release
+      - name: draft-release
         uses: ./.github/workflows/common/release
         with:
-          pre-release: true
+          draft: true
           tag: ${{ steps.git-tag.outputs.TAG }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,3 +56,28 @@ jobs:
           echo "Approved."
       - name: checkout
         uses: actions/checkout@v4
+      - name: tag
+        id: git-tag
+        uses: ./.github/workflows/common/tag
+        with:
+          environment: prod-dto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: generate-release-note
+        uses: ./.github/workflows/common/release-note
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{ steps.git-tag.outputs.TAG }}
+      - name: release
+        uses: ./.github/workflows/common/release
+        with:
+          tag: ${{ steps.git-tag.outputs.TAG }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: delete-draf-release
+        uses: ./.github/workflows/common/delete-release
+        with:
+          tag: ${{ needs.pre-release.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
