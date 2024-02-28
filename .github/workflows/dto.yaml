@@ -27,17 +27,19 @@ jobs:
         uses: actions/checkout@v4
       - name: tag
         uses: ./.github/workflows/common/tag
+        with:
+          environment: staging-dto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          environment: staging-dto
       - name: generate-release-note
         uses: ./.github/workflows/common/release-note
       - name: pre-release
         uses: ./.github/workflows/common/release
+        with:
+          pre-release: true
+          tag: ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ env.TAG }}
-          pre-release: true
 
   release:
     runs-on: ubuntu-latest
@@ -47,12 +49,14 @@ jobs:
         uses: actions/checkout@v4
       - name: tag
         uses: ./.github/workflows/common/tag
+        with:
+          environment: prod-dto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          environment: staging-dto
       - name: pre-release
         uses: ./.github/workflows/common/release
+        with:
+          pre-release: false
+          tag: ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ env.TAG }}
-          pre-release: false
