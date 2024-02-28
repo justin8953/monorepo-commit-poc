@@ -9,7 +9,8 @@ runs:
     - shell: bash
       run: |
         ts=`date +%s%3N`
-        TAG=${{ inputs.environment }}-$ts >> "$GITHUB_OUTPUT"
+        TAG=${{ inputs.environment }}-$ts
         echo create tag $TAG
         git tag $TAG
         git push origin --tags
+        echo ::set-output name=TAG::$TAG

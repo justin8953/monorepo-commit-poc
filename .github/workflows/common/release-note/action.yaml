@@ -17,4 +17,5 @@ runs:
             -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq '.[].commit | {message: .message, author: .author.name, date: .author.date, url: .url}')
           echo $history >> CHANGELOG.md
         done
-        NOTE=$(cat CHANGELOG.md) >> "$GITHUB_OUTPUT"
+        NOTE=$(cat CHANGELOG.md)
+        echo ::set-output name=NOTE::$NOTE
