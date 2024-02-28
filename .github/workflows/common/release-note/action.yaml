@@ -30,7 +30,7 @@ runs:
       shell: bash
       run: |
         yarn
-        yarn generate-changelog
+        yarn run generate-changelog
     - name: upload release note
       uses: actions/upload-artifact@v4
       with:
