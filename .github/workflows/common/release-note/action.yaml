@@ -22,10 +22,11 @@ runs:
           echo $history >> CHANGELOG.json
         done
         echo "]" >> CHANGELOG.json
-    - name: format release note
-      use: actions/setup-node@4
+    - name: setup node
+      use: actions/setup-node@v4
       with:
-        node-version: "18"
+        node-version: "20.x"
+    - name: generate release note
       run: |
         yarn
         yarn generate-changelog
