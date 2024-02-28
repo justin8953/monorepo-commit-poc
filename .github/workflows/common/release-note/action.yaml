@@ -27,6 +27,7 @@ runs:
       with:
         node-version: "20.x"
     - name: generate release note
+      shell: bash
       run: |
         yarn
         yarn generate-changelog
