@@ -30,6 +30,8 @@ jobs:
         uses: ./.github/workflows/common/find-latest-release
         with:
           environment: staging-account
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
