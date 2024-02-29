@@ -26,8 +26,8 @@ enum CommitType {
 
 type ChangeLogData = {
     commits: string[];
-    jiraIDs: string[];
-    author: string[];
+    jiraIDs: Set<string>;
+    author: Set<string>;
 }
 
 type ChangeLogByComponent = Record<string, {
@@ -107,70 +107,70 @@ changelog.forEach(commit => {
         components[scope] = {
             [CommitType.feat]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.fix]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.perf]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.refactor]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.style]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.test]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.chore]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.docs]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.ci]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.build]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.revert]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
             [CommitType.other]: {
                 commits: [],
-                jiraIDs: [],
-                author: [],
+                jiraIDs: new Set(),
+                author: new Set(),
             },
         }
     }
     const component = components[scope][type];
-    component.commits.push(`${message} by @${commit.author} [Link](${commit.url}) `);
-    component.jiraIDs.push(jiraID);
-    component.author.push(commit.author);
+    component.commits.push(`${message} by @${commit.author} [link](${commit.url}) `);
+    component.jiraIDs.add(jiraID);
+    component.author.add(commit.author);
 });
 
 console.log(JSON.stringify(components));
@@ -188,16 +188,16 @@ Object.entries(components).forEach(([scope, component]) => {
             }).join('\n');
             CHANGELOG_BODY += '\n\n';
         }
-        if(data.jiraIDs.length > 0) {
+        if(data.jiraIDs.size > 0) {
             CHANGELOG_BODY += `#### Related JIRA IDs \n\n`;
-            CHANGELOG_BODY += data.jiraIDs.map((jiraID, index) => {
+            CHANGELOG_BODY += Array.from(data.jiraIDs).map((jiraID, index) => {
                 return `${index + 1}. ${jiraID}`;
             }).join('\n');
             CHANGELOG_BODY += '\n\n';
         }
-        if(data.author.length > 0) {
+        if(data.author.size > 0) {
             CHANGELOG_BODY += `#### Authors \n\n`;
-            CHANGELOG_BODY += data.author.map((author, index) => {
+            CHANGELOG_BODY += Array.from(data.author).map((author, index) => {
                 return `${index + 1}. @${author}`;
             }).join('\n');
             CHANGELOG_BODY += '\n\n';
