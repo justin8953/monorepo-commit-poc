@@ -30,6 +30,8 @@ jobs:
         uses: ./.github/workflows/common/find-latest-release
         with:
           environment: staging-dto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
@@ -67,6 +69,8 @@ jobs:
         uses: ./.github/workflows/common/find-latest-release
         with:
           environment: prod-dto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
