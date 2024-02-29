@@ -4,7 +4,7 @@ inputs:
     type: string
     required: true
 outputs:
-  latest:
+  tag:
     description: "The latest release tag name"
     value: ${{ steps.find_latest.outputs.tag }}
 runs:
