@@ -1,5 +1,8 @@
 name: release
 inputs:
+  release-note-name:
+    type: string
+    required: true
   tag:
     type: string
     required: true
@@ -13,7 +16,7 @@ runs:
     - name: download-release-note
       uses: actions/download-artifact@v4
       with:
-        name: ${{inputs.tag}}-release-note
+        name: ${{inputs.release-note-name}}
     - name: release
       shell: bash
       run: |

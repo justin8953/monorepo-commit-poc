@@ -43,6 +43,7 @@ jobs:
         with:
           draft: true
           tag: ${{ steps.git-tag.outputs.TAG }}
+          release-note-name: ${{ steps.git-tag.outputs.TAG }}-release-note
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
@@ -63,17 +64,12 @@ jobs:
           environment: prod-dto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: generate-release-note
-        uses: ./.github/workflows/common/release-note
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag: ${{ steps.git-tag.outputs.TAG }}
       - name: release
         uses: ./.github/workflows/common/release
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
           draft: false
+          release-note-name: ${{ needs.pre-release.outputs.tag }}-release-note
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: delete-draf-release
