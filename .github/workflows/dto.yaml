@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: latest-release
+        id: latest-tag
+        uses: ./.github/workflows/common/find-latest-release
+        with:
+          environment: staging-dto
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
@@ -57,6 +62,11 @@ jobs:
           echo "Approved."
       - name: checkout
         uses: actions/checkout@v4
+      - name: latest-release
+        id: latest-tag
+        uses: ./.github/workflows/common/find-latest-release
+        with:
+          environment: prod-dto
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag

@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: latest-release
+        id: latest-tag
+        uses: ./.github/workflows/common/find-latest-release
+        with:
+          environment: staging-account
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
@@ -38,6 +43,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
+          previous-tag: ${{ steps.latest-tag.outputs.tag }}
       - name: draft-release
         uses: ./.github/workflows/common/release
         with:
@@ -57,6 +63,13 @@ jobs:
           echo "Approved."
       - name: checkout
         uses: actions/checkout@v4
+      - name: latest-release
+        id: latest-tag
+        uses: ./.github/workflows/common/find-latest-release
+        with:
+          environment: prod-account
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: tag
         id: git-tag
         uses: ./.github/workflows/common/tag
