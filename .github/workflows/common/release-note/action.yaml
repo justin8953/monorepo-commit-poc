@@ -12,9 +12,8 @@ runs:
     - name: Create release note file
       shell: bash
       run: |
-        prs=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
+        pr=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
         -X GET /repos/justin8953/monorepo-commit-poc/commits/${{inputs.tag}}/pulls --jq '.[].number')
-        pr=$(echo $prs | jq -r '.[0]')
         echo "PR: $pr"
         history=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
           -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq 'map({message: .commit.message, author: .author.login, date: .commit.author.date, url: .commit.url})')
