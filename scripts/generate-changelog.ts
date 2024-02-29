@@ -168,7 +168,7 @@ changelog.forEach(commit => {
         }
     }
     const component = components[scope][type];
-    component.commits.push(`${message} by @${commit.author} [link](${commit.url}) `);
+    component.commits.push(`${message} by @${commit.author} [Link](${commit.url}) `);
     component.jiraIDs.push(jiraID);
     component.author.push(commit.author);
 });
@@ -184,7 +184,7 @@ Object.entries(components).forEach(([scope, component]) => {
         if (data.commits.length > 0) {
             CHANGELOG_BODY += `#### ${type}\n\n`;
             CHANGELOG_BODY += data.commits.map((commit, index) => {
-                return `${index + 1}. ${commit} (${data.jiraIDs[index]})`;
+                return `${index + 1}. ${commit}`;
             }).join('\n');
             CHANGELOG_BODY += '\n\n';
         }

@@ -18,7 +18,7 @@ runs:
         -X GET /repos/justin8953/monorepo-commit-poc/commits/${{inputs.tag}}/pulls --jq '.[].number')
         echo "PR: $pr"
         history=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
-          -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq 'map({message: .commit.message, author: .author.login, date: .commit.author.date, url: .commit.url})')
+          -X GET /repos/justin8953/monorepo-commit-poc/pulls/$pr/commits --jq 'map({message: .commit.message, author: .author.login, date: .commit.author.date, url: .html_url})')
         echo $history >> CHANGELOG.json
     - name: setup node
       uses: actions/setup-node@v4
