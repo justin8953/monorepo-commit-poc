@@ -48,5 +48,8 @@ Below is the template of release note
 [Full Changelog](the link compares with current tag and previous release)
 ```
 
+## Improvement
 
-
+1. Update tag name and release tile to let Github UI sorts well and make people search easily
+2. Update workflow to delete draft release when deployment is rejected 
+3. Remove artifact when production release is created
