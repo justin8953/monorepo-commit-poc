@@ -14,7 +14,7 @@ runs:
       id: find_latest
       shell: bash
       run: |
-        match_releases=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/justin8953/monorepo-commit-poc/releases --paginate --jq 'map(.tag_name | select(startswith("${{inputs.environment}})")) | sort | reverse ')
+        match_releases=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/justin8953/monorepo-commit-poc/releases --paginate --jq 'map(.tag_name | select(startswith("${{inputs.environment}}"))) | sort | reverse ')
         if [ -z "$match_releases" ]; then
           echo "No previous release found"
           echo "tag=" >> $GITHUB_OUTPUT
