@@ -38,7 +38,7 @@ runs:
         else
           compare=$(gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \
             -X GET /repos/justin8953/monorepo-commit-poc/compare/${{inputs.previous-tag}}...${{inputs.tag}} --jq '.html_url')
-          echo "Full Changelog:: $compare" >> CHANGELOG.md
+          echo "[Full Changelog]($compare)" >> CHANGELOG.md
         fi
     - name: upload release note
       uses: actions/upload-artifact@v4
