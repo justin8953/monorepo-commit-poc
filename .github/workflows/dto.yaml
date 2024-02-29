@@ -45,6 +45,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
+          previous-tag: ${{ steps.latest-tag.outputs.tag }}
       - name: draft-release
         uses: ./.github/workflows/common/release
         with:
