@@ -12,7 +12,8 @@ inputs:
     default: true
 outputs:
   release_name:
-    type: string
+    description: "The new tag name"
+    value: ${{ steps.release.outputs.tag }}
 runs:
   using: composite
   steps:
@@ -20,7 +21,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: ${{inputs.release-note-name}}
-    - name: release
+    - id: release
       shell: bash
       run: |
         noteFile="--generate-notes"
