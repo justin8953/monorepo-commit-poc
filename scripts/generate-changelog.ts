@@ -92,11 +92,10 @@ function parseJiraID(message: string) {
 }
 // parse arguments
 const args = process.argv.slice(2);
-if (args.length !== 0) {
+if (args.length === 0) {
   console.error("Invalid arguments");
   process.exit(1);
 }
-
 const runComponent = args[0];
 
 const changelog = JSON.parse(
