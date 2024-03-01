@@ -24,7 +24,6 @@ jobs:
     needs: build
     outputs:
       tag: ${{ steps.git-tag.outputs.TAG }}
-      release_name: ${{ steps.draft-release.outputs.release_name }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -87,6 +86,6 @@ jobs:
       - name: delete-draf-release
         uses: ./.github/workflows/common/delete-release
         with:
-          release_name: ${{ needs.pre-release.outputs.release_name }}
+          tag: ${{ needs.pre-release.outputs.tag }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

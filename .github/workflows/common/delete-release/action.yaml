@@ -1,6 +1,6 @@
 name: delete-release
 inputs:
-  release_name:
+  tag:
     type: string
     required: true
 runs:
@@ -9,5 +9,5 @@ runs:
     - name: delete-release
       shell: bash
       run: |
-        echo "Deleting release ${{ inputs.release_name }}"
-        gh release delete ${{ inputs.release_name }} --yes
+        echo "Deleting release ${{ inputs.tag }}"
+        gh release delete ${{ inputs.tag }} --yes

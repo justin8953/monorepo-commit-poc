@@ -10,10 +10,7 @@ inputs:
     type: boolean
     required: true
     default: true
-outputs:
-  release_name:
-    description: "The new tag name"
-    value: ${{ steps.release.outputs.release_name }}
+
 runs:
   using: composite
   steps:
@@ -37,4 +34,3 @@ runs:
         today=$(date +"%Y-%m-%d")
         releaseName="$today-${{inputs.tag}}"
         gh release create ${{inputs.tag}} -t $releaseName $noteFile $draft
-        echo "release_name=$releaseName" >> $GITHUB_OUTPUT
