@@ -10,6 +10,9 @@ inputs:
     type: boolean
     required: true
     default: true
+outputs:
+  release_name:
+    type: string
 runs:
   using: composite
   steps:
@@ -31,4 +34,6 @@ runs:
           draft="--draft"
         fi
         today=$(date +"%Y-%m-%d")
-        gh release create ${{inputs.tag}} -t '${{today}}-${{inputs.tag}}' $noteFile $draft
+        releaseName="$today-${{inputs.tag}}"
+        gh release create ${{inputs.tag}} -t $releaseName $noteFile $draft
+        echo "release_name=$releaseName" >> $GITHUB_OUTPUT
