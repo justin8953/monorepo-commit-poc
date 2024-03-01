@@ -30,4 +30,5 @@ runs:
         if ${{inputs.draft}}; then
           draft="--draft"
         fi
-        gh release create ${{inputs.tag}} -t ${{inputs.tag}} $noteFile $draft
+        today=$(date +"%Y-%m-%d")
+        gh release create ${{inputs.tag}} -t '${{today}}-${{inputs.tag}}' $noteFile $draft

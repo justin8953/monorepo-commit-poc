@@ -46,6 +46,7 @@ jobs:
         with:
           tag: ${{ steps.git-tag.outputs.TAG }}
           previous-tag: ${{ steps.latest-tag.outputs.tag }}
+          app_name: "@commit-poc/account"
       - name: draft-release
         uses: ./.github/workflows/common/release
         with:
