@@ -22,6 +22,7 @@ jobs:
     needs: build
     outputs:
       tag: ${{ steps.git-tag.outputs.TAG }}
+      release_name: ${{ steps.draft-release.outputs.release_name }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -47,7 +48,7 @@ jobs:
           tag: ${{ steps.git-tag.outputs.TAG }}
           previous-tag: ${{ steps.latest-tag.outputs.tag }}
           app_name: "@commit-poc/dto"
-      - name: draft-release
+      - id: draft-release
         uses: ./.github/workflows/common/release
         with:
           draft: true
@@ -84,6 +85,6 @@ jobs:
       - name: delete-draf-release
         uses: ./.github/workflows/common/delete-release
         with:
-          tag: ${{ needs.pre-release.outputs.tag }}
+          release_name: ${{ needs.pre-release.outputs.release_name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
