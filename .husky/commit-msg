@@ -1,0 +1,53 @@
+commitTypeRegex="^(feat|fix|docs|style|refactor|perf|test|chore|revert|build|ci)"
+ticketRegex="\(\/\)\([A-Za-z]\)*-\([0-9]\{1,\}\)"
+commitType=$(git symbolic-ref HEAD --short | grep -Eo $commitTypeRegex)
+if [[ -z "$commitType" ]]; then
+  echo "commit type is not valid"
+  exit 1
+fi
+ticket=$(git symbolic-ref HEAD --short | grep -o $ticketRegex)
+
+echo "commit type: $commitType"
+echo "getting affected workspaces"
+
+# get the list of workspaces locations except the root
+workspacesJson=$(yarn workspaces list --json)
+workspaces=$(echo $workspacesJson | jq -rs 'map(.location)[1:]| reverse | join("\n")')
+echo "check workspace locations: $(echo $workspacesJson | jq -rs 'map(.location)[1:]| reverse | join(" ")') \n"
+changeComponents=""
+# total diffs
+diffs=$(git diff --name-only HEAD)
+# check change components
+for i in $workspaces; do
+  # check if a specific item (represented by the variable $i) is a directory
+  if [[ -d "$i" ]]; then
+    diff=$(git diff --name-only HEAD -- "$i")
+    echo "Checking $i diff: $diff \n"
+    if [[ $diff ]]; then
+      name=$(echo $workspacesJson | jq -rs 'map(select(.location == "'$i'")) | .[0].name')
+      # replace diff to empty
+      diffs=${diffs//$diff/}
+      changeComponents="$changeComponents $name"
+    fi
+  fi
+done
+if [[ $diffs ]]; then
+  changeComponents="$changeComponents others"
+fi
+
+# replace space with comma
+changeComponents=$(echo $changeComponents | tr ' ' ',')
+echo "diff components: $changeComponents"
+
+if [[ -z "$ticket" ]]; then
+  exit 0
+else 
+  # remove the / from the regex match
+  ticket=${ticket:1}
+  # uppercase the ticket number if it's lowercase
+  ticket=$(echo $ticket | tr '[a-z]' '[A-Z]')
+  # wrap in brackets
+  ticket="[${ticket}]"
+  # prepend to commit message
+  echo "$commitType($changeComponents): $ticket"' '$(cat "$1") > "$1"
+fi

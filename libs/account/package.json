@@ -1,0 +1,8 @@
+{
+    "name": "@commit-poc/account",
+    "private":"true",
+    "scripts": {
+      "test": "jest"
+    }
+  }
+  
