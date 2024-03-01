@@ -13,7 +13,7 @@ inputs:
 outputs:
   release_name:
     description: "The new tag name"
-    value: ${{ steps.release.outputs.tag }}
+    value: ${{ steps.release.outputs.release_name }}
 runs:
   using: composite
   steps:
