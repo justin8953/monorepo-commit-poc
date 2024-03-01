@@ -2,6 +2,7 @@
   "name": "@commit-poc/dto",
   "private":"true",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "echo 'build complete'"
   }
 }
