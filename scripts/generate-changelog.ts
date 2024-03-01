@@ -1,5 +1,3 @@
-// read CHANGELOG.json file and format it to release note
-
 import { readFileSync, writeFileSync } from 'fs';
 
 type Commit = {
@@ -44,7 +42,7 @@ type ChangeLogByComponent = Record<string, {
     [CommitType.revert]: ChangeLogData
     [CommitType.other]: ChangeLogData
 }>
-function parseScope(message: string) {
+function parseScopes(message: string) {
     const match = /\(([^)]+)\)/.exec(message);
     return match ? match[1] : '';
 }
@@ -95,82 +93,85 @@ const components:ChangeLogByComponent = {
 changelog.forEach(commit => {
     const type = parseType(commit.message);
 
-    const scope = parseScope(commit.message);
+    const scopes = parseScopes(commit.message);
     const message = parseMessage(commit.message);
     const jiraID = parseJiraID(message);
     
-    console.log(`### ${scope}`);
+    console.log(`### ${scopes}`);
     console.log(`### ${type}`);
     console.log(`### ${message}`);
     console.log(`### ${jiraID}`);
-    if (!components[scope]) {
-        components[scope] = {
-            [CommitType.feat]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.fix]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.perf]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.refactor]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.style]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.test]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.chore]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.docs]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.ci]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.build]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.revert]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
-            [CommitType.other]: {
-                commits: [],
-                jiraIDs: new Set(),
-                author: new Set(),
-            },
+    scopes.split(',').forEach(scope => {
+        if (!components[scope]) {
+            components[scope] = {
+                [CommitType.feat]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.fix]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.perf]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.refactor]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.style]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.test]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.chore]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.docs]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.ci]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.build]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.revert]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+                [CommitType.other]: {
+                    commits: [],
+                    jiraIDs: new Set(),
+                    author: new Set(),
+                },
+            }
         }
-    }
-    const component = components[scope][type];
-    component.commits.push(`${message} by @${commit.author} [link](${commit.url}) `);
-    component.jiraIDs.add(jiraID);
-    component.author.add(commit.author);
+        const component = components[scope][type];
+        component.commits.push(`${message} by @${commit.author} [link](${commit.url}) `);
+        component.jiraIDs.add(jiraID);
+        component.author.add(commit.author);
+    });
+    
 });
 
 console.log(JSON.stringify(components));
