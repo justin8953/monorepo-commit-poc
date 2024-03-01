@@ -2,6 +2,7 @@
   "name": "@commit-poc/dto",
   "scripts": {
     "test": "echo 'test complete'",
-    "build": "echo 'build complete'"
+    "build": "echo 'build complete'",
+    "lint": "echo 'lint complete'"
   }
 }

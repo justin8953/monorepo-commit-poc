@@ -1,6 +1,9 @@
 name: release-note
 
 inputs:
+  app_name:
+    description: "app name"
+    required: true
   tag:
     description: "tag"
     required: true
@@ -33,7 +36,7 @@ runs:
       shell: bash
       run: |
         yarn
-        yarn run generate-changelog
+        yarn run generate-changelog ${{inputs.app_name}}
     - name: get compare link
       shell: bash
       run: |
