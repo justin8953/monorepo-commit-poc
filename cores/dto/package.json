@@ -6,6 +6,6 @@
     "lint": "echo 'lint complete'",
     "clean": "echo 'clean complete'",
     "info": "echo 'dto info'",
-    "delete": "echo 'delete complete'"
+    "delete": "echo 'delete dto complete'"
   }
 }

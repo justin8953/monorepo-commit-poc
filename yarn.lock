@@ -428,6 +428,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@commit-poc/core@workspace:cores/core":
+  version: 0.0.0-use.local
+  resolution: "@commit-poc/core@workspace:cores/core"
+  languageName: unknown
+  linkType: soft
+
 "@commit-poc/dto@workspace:cores/dto":
   version: 0.0.0-use.local
   resolution: "@commit-poc/dto@workspace:cores/dto"
