@@ -1,11 +1,11 @@
 {
-  "name": "@commit-poc/dto",
+  "name": "@commit-poc/core",
   "scripts": {
     "test": "echo 'test complete'",
     "build": "echo 'build complete'",
     "lint": "echo 'lint complete'",
     "clean": "echo 'clean complete'",
-    "info": "echo 'dto info'",
+    "info": "echo 'core info'",
     "delete": "echo 'delete complete'"
   }
 }

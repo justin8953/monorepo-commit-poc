@@ -1,0 +1,89 @@
+name: core
+
+on:
+  push:
+    paths:
+      - "cores/core/**"
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: |
+          echo "Building..."
+          echo "Build complete."
+  pre-release:
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      tag: ${{ steps.git-tag.outputs.TAG }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: latest-release
+        id: latest-tag
+        uses: ./.github/workflows/common/find-latest-release
+        with:
+          environment: prod-core
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: tag
+        id: git-tag
+        uses: ./.github/workflows/common/tag
+        with:
+          environment: staging-core
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: generate-release-note
+        uses: ./.github/workflows/common/release-note
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{ steps.git-tag.outputs.TAG }}
+          previous-tag: ${{ steps.latest-tag.outputs.tag }}
+          app_name: "@commit-poc/core"
+      - id: draft-release
+        uses: ./.github/workflows/common/release
+        with:
+          draft: true
+          tag: ${{ steps.git-tag.outputs.TAG }}
+          release-note-name: ${{ steps.git-tag.outputs.TAG }}-release-note
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    runs-on: ubuntu-latest
+    needs: pre-release
+    environment: prod-core
+    steps:
+      - name: approval
+        shell: bash
+        run: |
+          echo "Approved."
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: tag
+        id: git-tag
+        uses: ./.github/workflows/common/tag
+        with:
+          environment: prod-core
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: release
+        uses: ./.github/workflows/common/release
+        with:
+          tag: ${{ steps.git-tag.outputs.TAG }}
+          draft: false
+          release-note-name: ${{ needs.pre-release.outputs.tag }}-release-note
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: delete-draf-release
+        uses: ./.github/workflows/common/delete-release
+        with:
+          tag: ${{ needs.pre-release.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

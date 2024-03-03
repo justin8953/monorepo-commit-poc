@@ -5,6 +5,7 @@
         "build": "echo 'build complete'",
         "lint": "echo 'lint complete'",
         "clean": "echo 'clean complete'",
-        "info": "echo 'account info'"
+        "info": "echo 'account info'",
+        "delete": "echo 'delete complete'"
     }
 }
