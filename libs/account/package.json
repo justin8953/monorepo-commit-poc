@@ -4,6 +4,7 @@
         "test": "echo 'test complete'",
         "build": "echo 'build complete'",
         "lint": "echo 'lint complete'",
-        "clean": "echo 'clean complete'"
+        "clean": "echo 'clean complete'",
+        "info": "echo 'account info'"
     }
 }
